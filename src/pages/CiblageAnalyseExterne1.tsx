@@ -46,9 +46,6 @@ const CiblageAnalyseExterne1: React.FC = () => {
         <div className="w-[90%] mt-4">
           {/* Title and Progress Steps in a more compact layout */}
           <div className="space-y-4">
-            <h1 className="text-2xl font-semibold text-slate-900">
-              Ciblage intelligent {currentStep}/4
-            </h1>
             <ProgressSteps steps={steps} currentStep={currentStep} />
           </div>
         </div>
