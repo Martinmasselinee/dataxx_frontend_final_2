@@ -1,0 +1,102 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Cursor Rules for Dataxx Frontend Project
+
+## Project Overview
+Dataxx is a web platform for LOSC football club that uses AI to identify optimum target groups for ticketing campaigns. The platform analyzes internal club data (ticketing, CRM, website, APIs) and external contextual data (weather, sports context, opponent, calendar, day/time) to create intelligent fan segments for specific games.
+
+**Output**: Segments containing fans and their information, with recommendations for:
+- Optimum offers to send
+- Timing for campaigns and follow-ups  
+- Marketing channels (Google Ads, Meta Ads, emailing, etc.)
+
+## Critical Development Rules
+
+### 🇫🇷 LANGUAGE REQUIREMENT
+- **ALL user-facing content MUST be in French**
+- **Interface text**: Labels, buttons, titles, messages, placeholders
+- **Comments in code**: All comments should be in French when possible
+- **Error messages**: Display errors in French
+- **This is for LOSC (French football club)** - French is the primary language
+- **Exception**: Technical code (variable names, function names) can remain in English
+
+### 🚫 BACKEND RESTRICTION
+- **NEVER build backend functionality**
+- **NEVER create APIs, databases, or server logic**
+- Focus ONLY on frontend development
+- Another developer is handling all backend/API/ML work separately
+- Code must be plug-and-play for easy backend integration
+
+### 🏗️ Architecture Requirements
+
+#### Technology Stack
+- **Node.js** - Runtime environment
+- **React** - Frontend framework  
+- **TypeScript** - Type safety and development experience
+- **Tailwind CSS** - Styling framework
+
+#### File Structure Rules
+1. **One page = One file**: Each new page MUST be in its own separate file
+2. **No centralized big files**: Never code everything in one large file
+3. **Separate components file**: Create reusable components in dedicated files
+4. **Mock data centralization**: ALL mock data goes in ONE unique page called `mock_data`
+
+#### Component Development Process
+1. Create components as requested
+2. **ALWAYS ask after creating**: "Should this component be reusable or one-shot?"
+3. If reusable: Move to reusable components file
+4. If one-shot: Keep in the specific page file
+
+### 📊 Mock Data Guidelines
+- Store ALL mock data in a single `mock_data` page/file
+- Make mock data intelligent and realistic for football/ticketing context
+- Organize mock data clearly so backend developer can easily:
+  - Find specific data pieces
+  - Replace with real API calls
+  - Understand data structure and format
+
+### 🎯 Data Context Examples
+Mock data should include realistic examples of:
+- **Team Performance**: Points scored in last 3 games, recent form, etc.
+- **Fan Segments**: Demographics, purchase history, engagement levels
+- **Game Context**: Weather forecasts, opponent strength, match importance
+- **Campaign Data**: Offer types, timing recommendations, channel preferences
+- **Marketing Metrics**: Campaign performance, conversion rates, etc.
+
+### 🖥️ Platform Targeting
+- **Desktop-Only Application**: NEVER code for mobile responsiveness
+- **Computer Responsive**: ALWAYS ensure responsiveness across different desktop screen sizes
+- **No Mobile Support**: App will only be available on computer/desktop platforms
+- **Target Screens**: Focus on laptop, desktop, and large monitor compatibility
+
+### 🔧 Code Quality Standards
+- Use TypeScript for all components and logic
+- Implement responsive design with Tailwind CSS (desktop screens only)
+- **Always use Space Grotesk font** throughout the entire website
+- Create clean, readable, and well-documented code
+- Ensure components are modular and easily replaceable
+- Follow React best practices and hooks patterns
+
+### 🤝 Collaboration Preparation
+- Code must be easily integrated with backend APIs
+- Clear separation between frontend logic and data sources
+- Consistent naming conventions for easy backend mapping
+- Well-structured props and interfaces for data passing
+
+## Development Workflow
+1. Understand the specific component/page requirement
+2. Create mock data in the centralized mock_data file
+3. Build the component/page using the specified tech stack
+4. Ask about reusability vs one-shot usage
+5. Organize code according to file structure rules
+6. Ensure plug-and-play compatibility for backend integration
+
+## Remember
+- This is a football club ticketing optimization platform
+- Focus on displaying data insights and campaign recommendations
+- Every piece of functionality should be frontend-focused
+- Maintain clean architecture for seamless backend integration
+- **ALWAYS use French for all user-facing content** 
