@@ -13,7 +13,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Cog6ToothIcon, ArrowDownTrayIcon, ChevronLeftIcon, ChevronRightIcon, ChartBarIcon, QuestionMarkCircleIcon, ArrowRightOnRectangleIcon, DocumentMagnifyingGlassIcon, MagnifyingGlassIcon, HashtagIcon } from '@heroicons/react/24/outline';
+import { Cog6ToothIcon, ArrowDownTrayIcon, ChevronLeftIcon, ChevronRightIcon, ChartBarIcon, QuestionMarkCircleIcon, ArrowRightOnRectangleIcon, DocumentMagnifyingGlassIcon, HashtagIcon } from '@heroicons/react/24/outline';
 
 // ================================================================
 // INTERFACES TYPESCRIPT
@@ -952,10 +952,23 @@ export const SegmentCard: React.FC<SegmentCardProps> = ({
             <p className="text-sm text-gray-600">{description}</p>
           </div>
 
-          <div className="space-y-0">
+          <div className="space-y-2">
+            {/* Bouton mots clés optimisés */}
+            <button 
+              onClick={handleKeywordsExpand}
+              className={`w-full flex items-center justify-center px-4 py-1.5 text-sm transition-colors duration-200 rounded-md border ${
+                isKeywordsExpanded 
+                  ? 'bg-slate-100 text-slate-700 hover:bg-slate-200 border-slate-200' 
+                  : 'bg-white text-black hover:bg-gray-50 border-gray-200'
+              }`}
+            >
+              <HashtagIcon className="w-4 h-4 mr-2" />
+              {isKeywordsExpanded ? 'Masquer les mots clés' : 'Mots clés optimisés'}
+            </button>
+
             {/* Bouton d'export */}
             <button 
-              className="w-full mt-6 flex items-center justify-center px-4 py-1.5 text-sm bg-green-50 text-green-700 hover:bg-green-100 transition-colors duration-200 rounded-md border border-green-200"
+              className="w-full flex items-center justify-center px-4 py-1.5 text-sm bg-green-500 text-white hover:bg-green-600 transition-colors duration-200 rounded-md"
               onClick={() => {
                 // L'action d'export sera implémentée plus tard
                 console.log(`Exporting segment: ${title}`);
@@ -965,28 +978,10 @@ export const SegmentCard: React.FC<SegmentCardProps> = ({
               Exporter le segment
             </button>
 
-            {/* Bouton mots clés optimisés */}
-            <div className="py-2">
-              <button 
-                onClick={handleKeywordsExpand}
-                className={`w-full flex items-center justify-center px-4 py-1.5 text-sm transition-colors duration-200 rounded-md border ${
-                  isKeywordsExpanded 
-                    ? 'bg-slate-100 text-slate-700 hover:bg-slate-200 border-slate-200' 
-                    : 'bg-white text-black hover:bg-gray-50 border-gray-200'
-                }`}
-              >
-                <MagnifyingGlassIcon className="w-5 h-5 mr-2" />
-                {isKeywordsExpanded ? 'Masquer les mots clés' : 'Mots clés optimisés'}
-              </button>
-            </div>
-
-            {/* Séparateur */}
-            <div className="w-full mt-2 border-t border-gray-200"></div>
-
             {/* Bouton de suivi des performances */}
             <BoutonPrimaire
               onClick={handleExpand}
-              className={`!w-full !mt-3 !py-1.5 !text-sm !rounded-md ${
+              className={`!w-full !py-1.5 !text-sm !rounded-md ${
                 isExpanded 
                   ? '!bg-slate-100 !text-slate-700 hover:!bg-slate-200' 
                   : '!bg-black hover:!bg-slate-800'

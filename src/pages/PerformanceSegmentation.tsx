@@ -317,6 +317,10 @@ const PerformanceSegmentation: React.FC = () => {
               <div 
                 ref={scrollContainerRef}
                 className="flex overflow-x-auto pb-4 gap-4 hide-scrollbar scroll-smooth"
+                onScroll={(e) => {
+                  // Force re-render to update shadow visibility
+                  setCurrentBatch(Math.floor(e.currentTarget.scrollLeft / (CARDS_PER_BATCH * (350 + 16))) + 1);
+                }}
               >
                 <SegmentCard {...segmentTemplates.bigMatchFans} onExpand={handleCardExpand} />
                 <SegmentCard {...segmentTemplates.loyalSubscribers} onExpand={handleCardExpand} />
