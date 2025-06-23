@@ -174,8 +174,8 @@ interface ProgressStepsProps {
 
 interface Carte3DProps {
   title: string;
-  value: string;
-  subtitle?: string;
+  value: React.ReactNode;
+  subtitle?: React.ReactNode;
   icon?: React.ReactNode;
   className?: string;
   borderColor?: string;
