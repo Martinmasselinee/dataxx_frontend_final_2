@@ -172,6 +172,15 @@ interface ProgressStepsProps {
   className?: string;
 }
 
+interface Carte3DProps {
+  title: string;
+  value: string;
+  subtitle?: string;
+  icon?: React.ReactNode;
+  className?: string;
+  borderColor?: string;
+}
+
 // ================================================================
 // COMPOSANTS RÉUTILISABLES
 // ================================================================
@@ -1255,6 +1264,55 @@ export const ProgressSteps: React.FC<ProgressStepsProps> = ({ steps, currentStep
             )}
           </div>
         ))}
+      </div>
+    </div>
+  );
+};
+
+export const Carte3D: React.FC<Carte3DProps> = ({
+  title,
+  value,
+  subtitle,
+  icon,
+  className = '',
+  borderColor = 'border-blue-500'
+}) => {
+  return (
+    <div 
+      className={`
+        relative group
+        bg-white/90 backdrop-blur-sm
+        p-6 rounded-xl
+        transform transition-all duration-300
+        hover:scale-[1.02] hover:-translate-y-1
+        shadow-[0_8px_30px_rgb(0,0,0,0.12)]
+        hover:shadow-[0_20px_40px_rgb(0,0,0,0.12)]
+        border border-gray-100
+        ${className}
+        before:content-['']
+        before:absolute before:top-0 before:left-0 before:right-0
+        before:h-1 before:rounded-t-xl
+        before:${borderColor}
+        before:bg-current
+      `}
+    >
+      <div className="flex items-start justify-between">
+        <div className="space-y-3">
+          <p className="text-sm font-medium text-gray-500">{title}</p>
+          <div>
+            <p className="text-2xl font-semibold text-gray-900">{value}</p>
+            {subtitle && (
+              <p className="text-sm text-gray-500 mt-0.5">{subtitle}</p>
+            )}
+          </div>
+        </div>
+        {icon && (
+          <div className="p-2.5 bg-gray-50 rounded-lg group-hover:bg-gray-100 transition-colors">
+            <div className="text-gray-600">
+              {icon}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

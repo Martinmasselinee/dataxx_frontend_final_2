@@ -47,8 +47,14 @@ const CiblageTransition: React.FC = () => {
             <div className="w-24 h-24 border-4 border-t-blue-500 border-r-purple-500 border-b-pink-500 border-l-indigo-500 rounded-full animate-spin"></div>
             {/* Inner circle */}
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-16 h-16 border-4 border-t-pink-500 border-r-indigo-500 border-b-blue-500 border-l-purple-500 rounded-full animate-spin-reverse"></div>
-            {/* Center dot */}
-            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full animate-pulse"></div>
+            {/* Center logo */}
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8">
+              <img 
+                src="/dataxx_logo.png" 
+                alt="Dataxx Logo" 
+                className="w-full h-full object-contain animate-pulse"
+              />
+            </div>
           </div>
 
           {/* Match Information */}
