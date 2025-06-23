@@ -314,7 +314,7 @@ const MatchDetails: React.FC = () => {
           ← Retour
         </BoutonPrimaire>
         <BoutonPrimaire
-          onClick={() => {}}
+          onClick={() => navigate('/ciblage-transition', { state: { match } })}
           className="!bg-black hover:!bg-slate-800 !px-6 !w-auto flex items-center gap-2"
         >
           <SparklesIcon className="h-5 w-5" />

@@ -5,6 +5,8 @@ import SignIn from './pages/SignIn';
 import Home from './pages/Home';
 import MatchDetails from './pages/MatchDetails';
 import PerformanceSegmentation from './pages/PerformanceSegmentation';
+import CiblageTransition from './pages/CiblageTransition';
+import CiblageAnalyseExterne1 from './pages/CiblageAnalyseExterne1';
 import { mockData } from './data/mock_data';
 import './App.css'
 
@@ -46,6 +48,8 @@ const AppRouter: React.FC = () => {
       <Route path="/home" element={<Home />} />
       <Route path="/match-details/:id" element={<MatchDetails />} />
       <Route path="/performance-segmentation" element={<PerformanceSegmentation />} />
+      <Route path="/ciblage-transition" element={<CiblageTransition />} />
+      <Route path="/ciblage-analyse-externe-1" element={<CiblageAnalyseExterne1 />} />
       <Route path="/" element={<SplashScreen />} />
     </Routes>
   );
