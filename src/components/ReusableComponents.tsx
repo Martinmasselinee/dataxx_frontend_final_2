@@ -201,6 +201,11 @@ interface SmallInfoCardProps {
   icon?: React.ReactNode;
 }
 
+interface TypewriterTextProps {
+  text: string;
+  className?: string;
+}
+
 // ================================================================
 // COMPOSANTS RÉUTILISABLES
 // ================================================================
@@ -1482,5 +1487,34 @@ export const ExternalContextCard: React.FC<ExternalContextCardProps> = ({
         <InfoRow label="École le lendemain" value={ecoleLeLendemain} isBoolean />
       </div>
     </div>
+  );
+};
+
+export const TypewriterText: React.FC<TypewriterTextProps> = ({ text, className = '' }) => {
+  const [displayedText, setDisplayedText] = useState('');
+  const [isTyping, setIsTyping] = useState(true);
+  const currentIndexRef = useRef(0);
+
+  useEffect(() => {
+    if (!isTyping) return;
+
+    const interval = setInterval(() => {
+      if (currentIndexRef.current < text.length) {
+        setDisplayedText(text.slice(0, currentIndexRef.current + 1));
+        currentIndexRef.current += 1;
+      } else {
+        setIsTyping(false);
+        clearInterval(interval);
+      }
+    }, 30);
+
+    return () => clearInterval(interval);
+  }, [text, isTyping]);
+
+  return (
+    <span className={className}>
+      {displayedText}
+      {isTyping && <span className="animate-pulse">|</span>}
+    </span>
   );
 }; 
