@@ -15,7 +15,7 @@ const CiblageTransition: React.FC = () => {
   useEffect(() => {
     // Navigate to the next page after 5 seconds
     const timer = setTimeout(() => {
-      navigate('/performance-segmentation', { state: { match } });
+      navigate('/segmentation-intelligente-1', { state: { match } });
     }, 5000);
 
     return () => clearTimeout(timer);

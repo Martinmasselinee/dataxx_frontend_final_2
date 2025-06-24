@@ -6,6 +6,7 @@ import Home from './pages/Home';
 import MatchDetails from './pages/MatchDetails';
 import PerformanceSegmentation from './pages/PerformanceSegmentation';
 import CiblageTransition from './pages/CiblageTransition';
+import SegmentationIntelligente1 from './pages/SegmentationIntelligente1';
 import { mockData } from './data/mock_data';
 import './App.css'
 
@@ -48,6 +49,7 @@ const AppRouter: React.FC = () => {
       <Route path="/match-details/:id" element={<MatchDetails />} />
       <Route path="/performance-segmentation" element={<PerformanceSegmentation />} />
       <Route path="/ciblage-transition" element={<CiblageTransition />} />
+      <Route path="/segmentation-intelligente-1" element={<SegmentationIntelligente1 />} />
       <Route path="/" element={<SplashScreen />} />
     </Routes>
   );

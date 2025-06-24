@@ -13,7 +13,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Cog6ToothIcon, ArrowDownTrayIcon, ChevronLeftIcon, ChevronRightIcon, ChartBarIcon, QuestionMarkCircleIcon, ArrowRightOnRectangleIcon, DocumentMagnifyingGlassIcon, HashtagIcon } from '@heroicons/react/24/outline';
+import { Cog6ToothIcon, ArrowDownTrayIcon, ChevronLeftIcon, ChevronRightIcon, ChartBarIcon, QuestionMarkCircleIcon, ArrowRightOnRectangleIcon, DocumentMagnifyingGlassIcon, HashtagIcon, BuildingLibraryIcon, CalendarIcon, CloudIcon, ClipboardDocumentListIcon } from '@heroicons/react/24/outline';
 
 // ================================================================
 // INTERFACES TYPESCRIPT
@@ -179,6 +179,26 @@ interface Carte3DProps {
   icon?: React.ReactNode;
   className?: string;
   borderColor?: string;
+}
+
+interface ProgressBarProps {
+  currentStep: number;
+}
+
+interface ExternalContextCardProps {
+  jourFerieAvant: boolean;
+  jourFeriePendant: boolean;
+  jourFerieApres: boolean;
+  vacancesScolaires: boolean;
+  ecoleLeLendemain: boolean;
+  evenementsCompetiteurs: number;
+  onEvenementsClick?: () => void;
+}
+
+interface SmallInfoCardProps {
+  title: string;
+  value: string;
+  icon?: React.ReactNode;
 }
 
 // ================================================================
@@ -1313,6 +1333,153 @@ export const Carte3D: React.FC<Carte3DProps> = ({
             </div>
           </div>
         )}
+      </div>
+    </div>
+  );
+};
+
+export const ProgressBar: React.FC<ProgressBarProps> = ({ currentStep }) => {
+  return (
+    <div className="w-[90%] mb-8">
+      <div className="bg-white border border-gray-200 rounded-lg py-4 px-6">
+        <div className="grid grid-cols-3 items-center">
+          {/* Step 1 */}
+          <div className="flex items-center">
+            <div className={`w-6 h-6 ${currentStep >= 1 ? 'bg-blue-500' : 'bg-gray-200'} rounded-full flex items-center justify-center`}>
+              <span className={`${currentStep >= 1 ? 'text-white' : 'text-gray-600'} text-sm font-semibold`}>1</span>
+            </div>
+            <div className={`ml-2 ${currentStep >= 1 ? 'text-blue-500' : 'text-gray-500'} text-sm font-semibold`}>
+              Contexte externe
+            </div>
+          </div>
+
+          {/* Step 2 */}
+          <div className="flex items-center justify-center">
+            <div className={`w-6 h-6 ${currentStep >= 2 ? 'bg-blue-500' : 'bg-gray-200'} rounded-full flex items-center justify-center`}>
+              <span className={`${currentStep >= 2 ? 'text-white' : 'text-gray-600'} text-sm font-semibold`}>2</span>
+            </div>
+            <div className={`ml-2 ${currentStep >= 2 ? 'text-blue-500' : 'text-gray-500'} text-sm font-semibold`}>
+              Contexte sportif
+            </div>
+          </div>
+
+          {/* Step 3 */}
+          <div className="flex items-center justify-end">
+            <div className={`w-6 h-6 ${currentStep >= 3 ? 'bg-blue-500' : 'bg-gray-200'} rounded-full flex items-center justify-center`}>
+              <span className={`${currentStep >= 3 ? 'text-white' : 'text-gray-600'} text-sm font-semibold`}>3</span>
+            </div>
+            <div className={`ml-2 ${currentStep >= 3 ? 'text-blue-500' : 'text-gray-500'} text-sm font-semibold`}>
+              Segments intelligents
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export const SmallInfoCard: React.FC<SmallInfoCardProps> = ({ title, value, icon }) => {
+  const defaultIcon = <QuestionMarkCircleIcon className="w-5 h-5 text-gray-500" />;
+  
+  return (
+    <div className="overflow-hidden bg-white rounded-lg shadow-sm border border-gray-200 w-full">
+      <div className="bg-gray-50 px-6 py-3 border-b border-gray-200">
+        <div className="flex items-center space-x-2">
+          {icon || defaultIcon}
+          <h3 className="text-base font-medium text-gray-800">{title}</h3>
+        </div>
+      </div>
+      <div className="p-6">
+        <p className="text-base text-gray-600">{value}</p>
+      </div>
+    </div>
+  );
+};
+
+export const ExternalContextCard: React.FC<ExternalContextCardProps> = ({
+  jourFerieAvant,
+  jourFeriePendant,
+  jourFerieApres,
+  vacancesScolaires,
+  ecoleLeLendemain,
+  evenementsCompetiteurs,
+  onEvenementsClick
+}) => {
+  const InfoRow = ({ 
+    label, 
+    value, 
+    isBoolean = false, 
+    icon, 
+    onClick 
+  }: { 
+    label: string; 
+    value: string | boolean | number; 
+    isBoolean?: boolean; 
+    icon?: React.ReactNode;
+    onClick?: () => void;
+  }) => (
+    <div className="flex items-center justify-between h-[52px] px-6 border-b border-gray-100 last:border-0">
+      <div className="flex items-center space-x-2">
+        {icon && icon}
+        <span className="text-base text-gray-600">{label}</span>
+      </div>
+      {isBoolean ? (
+        <div className={`flex items-center ${value ? 'text-green-600' : 'text-red-600'}`}>
+          {value ? (
+            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
+            </svg>
+          ) : (
+            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"/>
+            </svg>
+          )}
+        </div>
+      ) : (
+        <span 
+          className={`text-base font-medium ${onClick ? 'text-blue-600 cursor-pointer hover:text-blue-700 underline' : 'text-gray-800'}`}
+          onClick={onClick}
+        >
+          {value}
+        </span>
+      )}
+    </div>
+  );
+
+  return (
+    <div className="overflow-hidden bg-white rounded-lg shadow-sm border border-gray-200 w-full">
+      <div className="bg-gray-50 px-6 py-3 border-b border-gray-200">
+        <div className="flex items-center space-x-2">
+          <ClipboardDocumentListIcon className="w-5 h-5 text-gray-500" />
+          <h2 className="text-base font-medium text-gray-800">Contexte Externe</h2>
+        </div>
+      </div>
+      <div>
+        <InfoRow 
+          label="Stade" 
+          value="Pierre-Mauroy" 
+          icon={<BuildingLibraryIcon className="w-5 h-5 text-gray-500" />}
+        />
+        <InfoRow 
+          label="Date et heure" 
+          value="Samedi 15 Mars 2024 - 21h00" 
+          icon={<CalendarIcon className="w-5 h-5 text-gray-500" />}
+        />
+        <InfoRow 
+          label="Météo prévue" 
+          value="Nuageux - 12°C - 2mm" 
+          icon={<CloudIcon className="w-5 h-5 text-gray-500" />}
+        />
+        <InfoRow 
+          label="Événements compétiteurs dans la région" 
+          value={`${evenementsCompetiteurs} événement${evenementsCompetiteurs > 1 ? 's' : ''}`}
+          onClick={onEvenementsClick}
+        />
+        <InfoRow label="Jour férié avant" value={jourFerieAvant} isBoolean />
+        <InfoRow label="Jour férié pendant" value={jourFeriePendant} isBoolean />
+        <InfoRow label="Jour férié après" value={jourFerieApres} isBoolean />
+        <InfoRow label="Vacances scolaires" value={vacancesScolaires} isBoolean />
+        <InfoRow label="École le lendemain" value={ecoleLeLendemain} isBoolean />
       </div>
     </div>
   );
