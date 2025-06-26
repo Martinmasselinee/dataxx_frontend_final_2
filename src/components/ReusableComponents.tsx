@@ -145,6 +145,13 @@ interface KeywordBubble {
   score: number; // Score between 0 and 1
 }
 
+// Add this interface before SegmentCardProps
+interface UserRowData {
+  name: string;
+  age: number;
+  email: string;
+}
+
 interface SegmentCardProps {
   title: string;
   dotColor: string;
@@ -163,7 +170,7 @@ interface SegmentCardProps {
   } | 'none';
   description: string;
   onExpand?: (cardElement: HTMLDivElement) => void;
-  keywords?: KeywordBubble[]; // Add this line
+  keywords?: KeywordBubble[];
 }
 
 interface ProgressStepsProps {
@@ -867,6 +874,91 @@ const KeywordBubble: React.FC<{ text: string; score: number }> = ({ text, score 
   );
 };
 
+// Add this component for the scrolling animation
+const ScrollingUserList: React.FC = () => {
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const ROW_HEIGHT = 60;
+  const VISIBLE_ROWS = 5;
+  const CENTER_INDEX = Math.floor(VISIBLE_ROWS / 2);
+  
+  // Mock user data
+  const mockUsers: UserRowData[] = [
+    { name: "Thomas Durant", age: 34, email: "thomas.durant@gmail.com" },
+    { name: "Marie Lefebvre", age: 28, email: "marie.l@outlook.fr" },
+    { name: "Lucas Bernard", age: 42, email: "lucas.bernard@yahoo.fr" },
+    { name: "Sophie Martin", age: 31, email: "sophie.martin@gmail.com" },
+    { name: "Pierre Dubois", age: 45, email: "p.dubois@orange.fr" },
+    { name: "Emma Petit", age: 29, email: "emma.petit@gmail.com" },
+    { name: "Antoine Roux", age: 37, email: "antoine.roux@sfr.fr" },
+    { name: "Julie Moreau", age: 33, email: "julie.moreau@gmail.com" },
+    { name: "Nicolas Lambert", age: 39, email: "n.lambert@outlook.fr" },
+    { name: "Camille Simon", age: 26, email: "c.simon@yahoo.fr" }
+  ];
+
+      useEffect(() => {
+      const animate = () => {
+        setScrollPosition(prev => (prev + 0.3) % mockUsers.length);
+      };
+      const interval = setInterval(animate, 50);
+      return () => clearInterval(interval);
+    }, [mockUsers.length]);
+
+  const getVisibleUsers = () => {
+    const users = [];
+    for (let i = -CENTER_INDEX; i <= CENTER_INDEX; i++) {
+      const index = Math.floor(scrollPosition + i);
+      const normalizedIndex = ((index % mockUsers.length) + mockUsers.length) % mockUsers.length;
+      users.push({ user: mockUsers[normalizedIndex], offset: i });
+    }
+    return users;
+  };
+
+  return (
+    <div className="relative h-[300px] w-full flex items-center justify-center overflow-hidden">
+      {/* Fixed highlight for center item */}
+      <div className="absolute inset-x-0 h-[60px] bg-gray-50/80 border-y border-gray-100" />
+      
+      {/* Top gradient */}
+      <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-white via-white to-transparent pointer-events-none z-10" />
+      
+      {/* Bottom gradient */}
+      <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-white via-white to-transparent pointer-events-none z-10" />
+      
+      {/* Scrolling content */}
+      <div className="relative w-full">
+        {getVisibleUsers().map(({ user, offset }, index) => {
+          const distance = Math.abs(offset);
+          const scale = 1 - (distance * 0.15); // Scale from 1 to 0.7
+          const opacity = 1 - (distance * 0.3); // Opacity from 1 to 0.1
+          
+          return (
+            <div
+              key={index}
+              className="absolute left-0 right-0 h-[60px] flex items-center justify-between px-6"
+              style={{
+                transform: `translateY(${(offset * ROW_HEIGHT) - ROW_HEIGHT/2}px) scale(${scale})`,
+                opacity: opacity,
+                transition: 'all 0.15s ease-out',
+              }}
+            >
+              <div className="flex items-center space-x-4">
+                <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center font-medium text-gray-600">
+                  {user.name.charAt(0)}
+                </div>
+                <div>
+                  <div className="text-sm font-medium text-gray-900">{user.name}</div>
+                  <div className="text-xs text-gray-500">{user.email}</div>
+                </div>
+              </div>
+              <div className="text-sm text-gray-600">{user.age} ans</div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
 /**
  * Composant pour la carte de segment
  */
@@ -882,7 +974,7 @@ export const SegmentCard: React.FC<SegmentCardProps> = ({
   optimalFollowUp,
   description,
   onExpand,
-  keywords = [ // Default mock keywords
+  keywords = [ // Restore default mock keywords
     { text: "Derby du Nord", score: 0.95 },
     { text: "Places VIP", score: 0.9 },
     { text: "Tribune Nord", score: 0.85 },
@@ -895,12 +987,14 @@ export const SegmentCard: React.FC<SegmentCardProps> = ({
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isKeywordsExpanded, setIsKeywordsExpanded] = useState(false);
+  const [isExportExpanded, setIsExportExpanded] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
   const handleExpand = () => {
     const newExpandedState = !isExpanded;
     setIsExpanded(newExpandedState);
-    setIsKeywordsExpanded(false); // Close keywords when expanding performance
+    setIsKeywordsExpanded(false);
+    setIsExportExpanded(false);
     if (newExpandedState && cardRef.current && onExpand) {
       onExpand(cardRef.current);
     }
@@ -909,7 +1003,18 @@ export const SegmentCard: React.FC<SegmentCardProps> = ({
   const handleKeywordsExpand = () => {
     const newExpandedState = !isKeywordsExpanded;
     setIsKeywordsExpanded(newExpandedState);
-    setIsExpanded(false); // Close performance when expanding keywords
+    setIsExpanded(false);
+    setIsExportExpanded(false);
+    if (newExpandedState && cardRef.current && onExpand) {
+      onExpand(cardRef.current);
+    }
+  };
+
+  const handleExportExpand = () => {
+    const newExpandedState = !isExportExpanded;
+    setIsExportExpanded(newExpandedState);
+    setIsExpanded(false);
+    setIsKeywordsExpanded(false);
     if (newExpandedState && cardRef.current && onExpand) {
       onExpand(cardRef.current);
     }
@@ -927,7 +1032,7 @@ export const SegmentCard: React.FC<SegmentCardProps> = ({
     <div 
       ref={cardRef}
       className={`bg-white rounded-lg shadow-sm border border-gray-200 mb-4 transition-all duration-300 ease-in-out flex ${
-        isExpanded || isKeywordsExpanded ? 'w-[1050px]' : 'w-[350px]'
+        isExpanded || isKeywordsExpanded || isExportExpanded ? 'w-[1050px]' : 'w-[350px]'
       }`}
     >
       {/* Section principale fixe (toujours 350px, ne bouge jamais) */}
@@ -1008,14 +1113,15 @@ export const SegmentCard: React.FC<SegmentCardProps> = ({
 
             {/* Bouton d'export */}
             <button 
-              className="w-full flex items-center justify-center px-4 py-1.5 text-sm bg-green-500 text-white hover:bg-green-600 transition-colors duration-200 rounded-md"
-              onClick={() => {
-                // L'action d'export sera implémentée plus tard
-                console.log(`Exporting segment: ${title}`);
-              }}
+              className={`w-full flex items-center justify-center px-4 py-1.5 text-sm transition-colors duration-200 rounded-md border ${
+                isExportExpanded
+                  ? 'bg-green-100 text-green-700 hover:bg-green-200 border-green-300'
+                  : 'bg-green-50 text-green-700 hover:bg-green-100 border-green-200'
+              }`}
+              onClick={handleExportExpand}
             >
-              <ArrowDownTrayIcon className="w-5 h-5 mr-2" />
-              Exporter le segment
+              <ArrowDownTrayIcon className={`w-5 h-5 mr-2 ${isExportExpanded ? 'text-green-700' : 'text-green-600'}`} />
+              {isExportExpanded ? 'Masquer l\'export' : 'Exporter le segment'}
             </button>
 
             {/* Bouton de suivi des performances */}
@@ -1040,7 +1146,7 @@ export const SegmentCard: React.FC<SegmentCardProps> = ({
       {/* Zone étendue */}
       <div 
         className={`transition-all duration-300 ease-in-out p-6 ${
-          isExpanded || isKeywordsExpanded ? 'w-[700px] opacity-100' : 'w-0 opacity-0 overflow-hidden'
+          isExpanded || isKeywordsExpanded || isExportExpanded ? 'w-[700px] opacity-100' : 'w-0 opacity-0 overflow-hidden'
         }`}
       >
         {isExpanded && (
@@ -1049,9 +1155,7 @@ export const SegmentCard: React.FC<SegmentCardProps> = ({
           </div>
         )}
         {isKeywordsExpanded && (
-          <div 
-            className="mt-4 h-[300px] flex items-center justify-center" 
-          >
+          <div className="mt-4 h-[300px] flex items-center justify-center">
             <div className="text-center max-w-[500px] translate-y-24">
               <div className="mb-3">
                 <h3 className="text-base font-semibold text-gray-900">Mots-clés optimisés</h3>
@@ -1068,6 +1172,30 @@ export const SegmentCard: React.FC<SegmentCardProps> = ({
                   />
                 ))}
               </div>
+            </div>
+          </div>
+        )}
+                  {isExportExpanded && (
+            <div className="h-full flex flex-col items-center justify-center">
+              <div className="text-center mb-1">
+                <h3 className="text-base font-semibold text-gray-900 mb-2">Aperçu des fans du segment</h3>
+                <p className="text-sm text-gray-500 mb-1">
+                  L'IA Dataxx a identifié {fansCount.toLocaleString('fr-FR')} fans dans ce segment.<br/>
+                  Ils représentent des cibles optimales pour cette campagne
+                </p>
+              </div>
+              <ScrollingUserList />
+              <div className="mt-1 flex justify-center">
+              <button
+                className="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors duration-200 flex items-center"
+                onClick={() => {
+                  // Logique d'export à implémenter
+                  console.log('Exporting full segment data...');
+                }}
+              >
+                <ArrowDownTrayIcon className="w-5 h-5 mr-2" />
+                Télécharger les données complètes
+              </button>
             </div>
           </div>
         )}
